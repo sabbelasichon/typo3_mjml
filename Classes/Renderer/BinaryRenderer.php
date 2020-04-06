@@ -19,6 +19,8 @@ namespace Ssch\Typo3Mjml\Renderer;
 use RuntimeException;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
+use TYPO3\CMS\Core\Utility\CommandUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 final class BinaryRenderer implements RendererInterface
 {
@@ -30,28 +32,37 @@ final class BinaryRenderer implements RendererInterface
 
     public function __construct(string $bin)
     {
-        $this->bin = $bin;
+        $this->bin = trim($bin);
     }
 
     public function render(string $content): string
     {
-        $arguments = [
-            $this->bin,
-            '-i',
-            '-s',
-            '--config.validationLevel',
-            '--config.minify',
-        ];
+        $temporaryFile = GeneralUtility::tempnam('mjml_', '.mjml');
 
-        $process = new Process($arguments);
-        $process->setInput($content);
+        GeneralUtility::writeFileToTypo3tempDir($temporaryFile, $content);
 
-        try {
-            $process->mustRun();
-        } catch (ProcessFailedException $e) {
-            throw new RuntimeException('Unable to compile MJML. Stack error: ' . $e->getMessage());
-        }
+        $cmd = $this->bin;
+        $args = $temporaryFile.' '.'-s --config.beautify true --config.minify true';
 
-        return $process->getOutput();
+        $result = [];
+        $returnValue = '';
+
+        CommandUtility::exec($this->getEscapedCommand($cmd, $args), $result, $returnValue);
+
+        GeneralUtility::unlink_tempfile($temporaryFile);
+
+        return implode('', $result);
+    }
+
+    private function getEscapedCommand(string $cmd, string $args): string
+    {
+        $escapedCmd = escapeshellcmd($cmd);
+
+        $argsArray = explode(' ', $args);
+        $escapedArgsArray = CommandUtility::escapeShellArguments($argsArray);
+        $escapedArgs = implode(' ', $escapedArgsArray);
+
+        return $escapedCmd.' '.$escapedArgs;
     }
 }
+

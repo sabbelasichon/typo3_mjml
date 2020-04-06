@@ -26,6 +26,16 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 class MjmlToHtmlViewHelper extends AbstractViewHelper
 {
     /**
+     * @var bool
+     */
+    protected $escapeChildren = false;
+
+    /**
+     * @var bool
+     */
+    protected $escapeOutput = false;
+
+    /**
      * @var RendererInterface
      */
     private $renderer;

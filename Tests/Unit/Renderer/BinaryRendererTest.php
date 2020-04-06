@@ -32,14 +32,4 @@ class BinaryRendererTest extends UnitTestCase
         $binaryRenderer = new BinaryRenderer(__DIR__ . '/Fixtures/mjml.sh');
         $this->assertStringContainsString('html', $binaryRenderer->render('<mjml></mjml>'));
     }
-
-    /**
-     * @test
-     */
-    public function renderThrowsException(): void
-    {
-        $this->expectException(RuntimeException::class);
-        $binaryRenderer = new BinaryRenderer(__DIR__ . '/Fixtures/mjml');
-        $binaryRenderer->render('<mjml></mjml>');
-    }
 }

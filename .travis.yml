@@ -5,6 +5,9 @@ php:
   - 7.3
   - 7.4
 
+services:
+  - mysql
+
 env:
   - TYPO3_VERSION="^9.5.0"
   - TYPO3_VERSION="^10.2.0"
@@ -28,6 +31,7 @@ before_install:
   - composer self-update
   - composer --version
   - phpenv config-rm xdebug.ini || return 0
+  - npm install -g mjml
 
 before_script:
   - composer require typo3/minimal=$TYPO3_VERSION
@@ -53,3 +57,11 @@ script:
     echo;
     echo "Running php lint";
     find . -name \*.php ! -path "./.Build/*" | parallel --gnu php -d display_errors=stderr -l {} > /dev/null \;
+
+  #- >
+  #  echo;
+  #  export typo3DatabaseName="typo3";
+  #  export typo3DatabaseHost="localhost";
+  #  export typo3DatabaseUsername="root";
+  #  export typo3DatabasePassword="";
+  #  find 'Tests/Functional' -wholename '*Test.php' | parallel --gnu 'echo; echo "Running functional test suite {}"; .Build/bin/phpunit --colors  -c .Build/vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml {}'
