@@ -1,0 +1,55 @@
+language: php
+
+php:
+  - 7.2
+  - 7.3
+  - 7.4
+
+env:
+  - TYPO3_VERSION="^9.5.0"
+  - TYPO3_VERSION="^10.2.0"
+
+os: linux
+
+addons:
+  apt:
+    packages:
+      - parallel
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+notifications:
+  email:
+    - breakpoint@schreibersebastian.de
+
+before_install:
+  - composer self-update
+  - composer --version
+  - phpenv config-rm xdebug.ini || return 0
+
+before_script:
+  - composer require typo3/minimal=$TYPO3_VERSION
+  # Restore composer.json
+  - git checkout composer.json
+  - export TYPO3_PATH_WEB=$PWD/.Build/Web
+  - mv phpunit.xml.dist phpunit.xml
+
+script:
+  - >
+    echo;
+    echo "Running unit tests";
+    .Build/bin/phpunit --colors -c phpunit.xml
+
+  - >
+    echo;
+    echo "Test coverage";
+    phpdbg -qrr -d memory_limit=-1 .Build/bin/phpunit -c phpunit.xml --coverage-clover coverage.xml;
+    wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar;
+    php php-coveralls.phar --verbose
+
+  - >
+    echo;
+    echo "Running php lint";
+    find . -name \*.php ! -path "./.Build/*" | parallel --gnu php -d display_errors=stderr -l {} > /dev/null \;

@@ -1,0 +1,79 @@
+{
+  "name": "ssch/typo3-mjml",
+  "type": "typo3-cms-extension",
+  "description": "MJML for TYPO3",
+  "license": "GPL-2.0-or-later",
+  "homepage": "http://www.schreibersebastian.de",
+  "keywords": [
+    "MJML",
+    "TYPO3",
+    "Fluid"
+  ],
+  "authors": [
+    {
+      "name": "Sebastian Schreiber",
+      "email": "breakpoint@schreibersebastian.de",
+      "role": "Developer",
+      "homepage": "http://www.schreibersebastian.de"
+    }
+  ],
+  "prefer-stable": true,
+  "minimum-stability": "dev",
+  "require": {
+    "php": ">=7.2.0 <8.0",
+    "typo3/cms-core": "^9.5 || ^10.2",
+    "symfony/process": "^5.0",
+    "typo3/cms-extbase": "^9.5 || ^10.2",
+    "typo3/cms-fluid": "^9.5 || ^10.2",
+    "ext-json": "*"
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^2.0",
+    "typo3/testing-framework": "^4.0 || ^6.2",
+    "phpspec/prophecy-phpunit": "^1.1"
+  },
+  "replace": {
+    "typo3-ter/typo3-mjml": "self.version"
+  },
+  "autoload": {
+    "psr-4": {
+      "Ssch\\Typo3Mjml\\": "Classes"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Ssch\\Typo3Mjml\\Tests\\": "Tests"
+    }
+  },
+  "config": {
+    "vendor-dir": ".Build/vendor",
+    "bin-dir": ".Build/bin",
+    "preferred-install": {
+      "typo3/cms": "source",
+      "typo3/cms-core": "source",
+      "*": "dist"
+    }
+  },
+  "scripts": {
+    "post-autoload-dump": [
+      "mkdir -p .Build/Web/typo3conf/ext/",
+      "[ -L .Build/Web/typo3conf/ext/typo3_mjml ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/typo3_mjml"
+    ],
+    "extension-create-libs": [
+      "@composer install -d Resources/Private/Php/Libraries"
+    ],
+    "extension-build": [
+      "@extension-create-libs"
+    ]
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0.0-dev"
+    },
+    "typo3/cms": {
+      "extension-key": "typo3_mjml",
+      "cms-package-dir": "{$vendor-dir}/typo3/cms",
+      "web-dir": ".Build/Web"
+    }
+  }
+}

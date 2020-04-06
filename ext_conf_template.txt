@@ -1,0 +1,11 @@
+# cat=basic; type=options[Binary=binary,Api=api]; label=Renderer type
+type = binary
+
+# cat=api; type=string; label=App id for mjml Api
+app_id =
+
+# cat=api; type=string; label=Secret key for mjml Api
+secrect_key =
+
+# cat=binary; type=string; label=Path to mjml binary: /usr/bin/node ./node_modules/mjml/bin/
+binary_path = /usr/bin/node ./node_modules/mjml/bin/
