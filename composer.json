@@ -21,13 +21,14 @@
   "minimum-stability": "dev",
   "require": {
     "php": ">=7.2.0 <8.0",
-    "typo3/cms-core": "^9.5 || ^10.2",
-    "symfony/process": "^5.0",
-    "typo3/cms-extbase": "^9.5 || ^10.2",
-    "typo3/cms-fluid": "^9.5 || ^10.2",
+    "typo3/cms-core": "^9.5 || ^10.3",
+    "typo3/cms-extbase": "^9.5 || ^10.3",
+    "typo3/cms-fluid": "^9.5 || ^10.3",
     "ext-json": "*"
   },
   "require-dev": {
+    "typo3/minimal": "^9.5 || ^10.3",
+    "typo3/cms-tstemplate": "^9.5 || ^10.3",
     "friendsofphp/php-cs-fixer": "^2.0",
     "typo3/testing-framework": "^4.0 || ^6.2",
     "phpspec/prophecy-phpunit": "^1.1"
@@ -58,12 +59,6 @@
     "post-autoload-dump": [
       "mkdir -p .Build/Web/typo3conf/ext/",
       "[ -L .Build/Web/typo3conf/ext/typo3_mjml ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/typo3_mjml"
-    ],
-    "extension-create-libs": [
-      "@composer install -d Resources/Private/Php/Libraries"
-    ],
-    "extension-build": [
-      "@extension-create-libs"
     ]
   },
   "extra": {

@@ -8,3 +8,5 @@
 /phpunit.xml
 /var
 .phpunit.result.cache
+.ddev
+config
