@@ -7,7 +7,6 @@ $EM_CONF[$_EXTKEY] = [
     'author' => 'Sebastian Schreiber',
     'author_email' => 'breakpoint@schreibersebastian.de',
     'state' => 'stable',
-    'clearCacheOnLoad' => false,
     'version' => '1.0.0',
     'constraints' => [
         'depends' => [
